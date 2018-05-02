@@ -1,0 +1,531 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package bill;
+import java.util.Date;
+import static bill.dbconn.cn;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.HeadlessException;
+import java.awt.event.ComponentListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.MessageFormat;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import net.proteanit.sql.DbUtils;
+import java.awt.print.*;
+import static java.awt.print.Printable.NO_SUCH_PAGE;
+import static java.awt.print.Printable.PAGE_EXISTS;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.Array;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+
+
+/**
+ *
+ * @author Sparrow
+ */
+public class NewJFrame extends javax.swing.JFrame {
+
+    /**
+     * Creates new form NewJFrame
+     */
+    public NewJFrame() {
+        initComponents();
+        try{
+             Class.forName("com.mysql.jdbc.Driver");
+             cn=DriverManager.getConnection("jdbc:mysql://localhost/billing", "root", "lbef");
+        }
+        catch(ClassNotFoundException | SQLException ex){
+            JOptionPane.showMessageDialog(null, ex);
+        }
+reportsearch();
+grandtotal();
+fetchsales();
+fetchgrandtotal();
+
+    }
+public void fetchsales(){
+        try{ 
+            
+            Class.forName("com.mysql.jdbc.Driver");
+             cn=DriverManager.getConnection("jdbc:mysql://localhost/billing", "root", "lbef");
+             
+    String querep1="select * from sales";
+    PreparedStatement ptrep1 = cn.prepareStatement(querep1);
+     
+  ResultSet rsrep1=ptrep1.executeQuery();
+    
+    report.setModel(DbUtils.resultSetToTableModel(rsrep1));
+    
+    }catch(Exception e){
+    
+
+}
+}
+public void reportsearch(){
+     try{ 
+            
+            java.util.Date ss= from.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String from1=sdf.format(ss);
+String from2=from1+"00:00:00";
+            java.util.Date ss1= to.getDate();
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            String to1 =sdf1.format(ss1);
+
+          String to2=to1+"00:00:00";
+            Class.forName("com.mysql.jdbc.Driver");
+             cn=DriverManager.getConnection("jdbc:mysql://localhost/billing", "root", "lbef");
+             
+    String querep2="select * from sales where Date >= '"+from2+"' and Date <= '"+to2+"'";
+    PreparedStatement ptrep2 = cn.prepareStatement(querep2);
+     
+  ResultSet rsrep2=ptrep2.executeQuery();
+    
+    report.setModel(DbUtils.resultSetToTableModel(rsrep2));
+    
+    }catch(Exception e){
+    
+
+}
+
+}
+public void grandtotal(){
+    
+    try{
+            Class.forName("com.mysql.jdbc.Driver");
+             cn=DriverManager.getConnection("jdbc:mysql://localhost/billing", "root", "lbef");
+             
+             
+    String querep3="select ID,Grand_Total,Date from sales where Grand_Total is NOT NULL";
+    PreparedStatement ptrep3 = cn.prepareStatement(querep3);
+     
+  ResultSet rsrep3=ptrep3.executeQuery();
+    
+    grandtotal.setModel(DbUtils.resultSetToTableModel(rsrep3));
+    
+    }catch(Exception e){
+    
+
+}
+}
+public void fetchgrandtotal(){
+        try{ 
+            
+            java.util.Date ss= from.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String from1=sdf.format(ss);
+String from2=from1+"00:00:00";
+            java.util.Date ss1= to.getDate();
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            String to1 =sdf1.format(ss1);
+
+          String to2=to1+"00:00:00";
+            Class.forName("com.mysql.jdbc.Driver");
+             cn=DriverManager.getConnection("jdbc:mysql://localhost/billing", "root", "lbef");
+             
+    String querep4="select ID,Grand_Total,Date from sales where Date >= '"+from2+"' and Date <= '"+to2+"' and Grand_Total is NOT NULL";
+    PreparedStatement ptrep4 = cn.prepareStatement(querep4);
+     
+  ResultSet rsrep4=ptrep4.executeQuery();
+    
+    grandtotal.setModel(DbUtils.resultSetToTableModel(rsrep4));
+    
+    }catch(Exception e){
+    
+
+}
+}
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jButton5 = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        from = new com.toedter.calendar.JDateChooser();
+        to = new com.toedter.calendar.JDateChooser();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        report = new javax.swing.JTable();
+        salestotal = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        grandtotal = new javax.swing.JTable();
+        totalbill = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu30 = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu36 = new javax.swing.JMenu();
+        jMenu37 = new javax.swing.JMenu();
+
+        jButton5.setText("jButton5");
+
+        jLabel14.setFont(new java.awt.Font("Tekton Pro Ext", 1, 18)); // NOI18N
+        jLabel14.setText("Welcome To Food 'o' Clock Sales Report");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        from.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                fromKeyPressed(evt);
+            }
+        });
+        getContentPane().add(from, new org.netbeans.lib.awtextra.AbsoluteConstraints(77, 51, 176, 32));
+        getContentPane().add(to, new org.netbeans.lib.awtextra.AbsoluteConstraints(356, 51, 190, 32));
+
+        jLabel1.setText("FROM");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(118, 101, 79, 26));
+
+        jLabel2.setText("TO");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(379, 101, 108, 26));
+
+        jButton1.setText("GO");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(572, 51, -1, -1));
+
+        report.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Item", "Price", "Quantity", "T_Price", "Discount", "Grand_Total", "", "Date"
+            }
+        ));
+        report.setGridColor(new java.awt.Color(51, 51, 51));
+        report.setSelectionBackground(new java.awt.Color(51, 51, 255));
+        report.setSelectionForeground(new java.awt.Color(204, 204, 204));
+        report.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(report);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 1140, 240));
+
+        salestotal.setText("wait");
+        getContentPane().add(salestotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 460, 110, 40));
+
+        jLabel3.setText("Total Sales");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 460, 100, 30));
+
+        jButton2.setText("Get Total");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 520, 110, 30));
+
+        grandtotal.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Grand_Total", "Date"
+            }
+        ));
+        jScrollPane2.setViewportView(grandtotal);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 400, 260, 240));
+        getContentPane().add(totalbill, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 510, 110, 40));
+
+        jButton3.setText("Empty");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 410, 110, 30));
+
+        jButton4.setText("Print");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 413, 100, 30));
+
+        jMenu30.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cropone.png"))); // NOI18N
+        jMenu30.setText("Category");
+        jMenu30.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jMenu30.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu30MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu30);
+
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/listitem.png"))); // NOI18N
+        jMenu1.setText("Item");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Icon-Foodnew.png"))); // NOI18N
+        jMenu2.setText("ViewItem");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu2);
+
+        jMenu36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/home.png"))); // NOI18N
+        jMenu36.setText("Home");
+        jMenu36.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu36MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu36);
+
+        jMenu37.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/report.png"))); // NOI18N
+        jMenu37.setText("Sales Report");
+        jMenu37.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu37MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu37);
+
+        setJMenuBar(jMenuBar1);
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void reportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportMouseClicked
+        // TODO add your handling code here:
+
+        
+
+    }//GEN-LAST:event_reportMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+reportsearch();        
+fetchgrandtotal();
+
+ 
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void fromKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fromKeyPressed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_fromKeyPressed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        int sum1=0;
+        for(int m=0; m < grandtotal.getRowCount(); m++){
+      sum1+=Integer.parseInt(grandtotal.getValueAt(m, 1).toString());
+        
+        } 
+        salestotal.setText(String.valueOf(sum1));
+int d=grandtotal.getRowCount();
+int d1=d;
+totalbill.setText(String.valueOf(d1));
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+ 
+
+try{
+         
+        
+
+             Class.forName("com.mysql.jdbc.Driver");
+             cn=DriverManager.getConnection("jdbc:mysql://localhost/billing", "root", "lbef");
+             String query28="TRUNCATE TABLE sales";  
+             PreparedStatement ps28 = cn.prepareStatement(query28);
+             
+             ps28.execute();
+             
+        }
+catch(Exception e){
+    
+}
+     
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+String grandsum=salestotal.getText(); 
+
+String tb=totalbill.getText();
+
+        java.util.Date ss4= from.getDate();
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            String from4=sdf1.format(ss4);
+            
+            java.util.Date ss5= to.getDate();
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+            String to3=sdf2.format(ss5);
+if(from4=="" || to3==""){
+    
+    from4="nodate";
+    to3="nodate";
+}
+            
+        MessageFormat header = new MessageFormat ("Report From"+from4+to3);
+         
+        MessageFormat footer = new MessageFormat ("Total sales:"+grandsum+""+ ""+   "Total no of Bill:"+tb);
+        try
+        {
+            report.print(JTable.PrintMode.NORMAL, header, footer);
+            grandtotal.print(JTable.PrintMode.NORMAL, header, footer);
+        }
+
+        catch (java.awt.print.PrinterException e)
+        {
+            System.err.format("Cannot Print %s%n", e.getMessage());
+        }
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jMenu30MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu30MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        category ct=new category();
+        ct.setVisible(true);
+    }//GEN-LAST:event_jMenu30MouseClicked
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+
+        // TODO add your handling code here:
+        this.setVisible(false);
+        menuupdate mn=new menuupdate();
+        mn.setVisible(true);
+    }//GEN-LAST:event_jMenu1MouseClicked
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        viewitem vw=new viewitem();
+        vw.setVisible(true);
+    }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenu36MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu36MouseClicked
+        // TODO add your handling code here:
+        this.setVisible(false);
+        billing Bil=new billing();
+        Bil.setVisible(true);
+    }//GEN-LAST:event_jMenu36MouseClicked
+
+    private void jMenu37MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu37MouseClicked
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        this.setVisible(false);
+        NewJFrame jf=new NewJFrame();
+        jf.setVisible(true);
+    }//GEN-LAST:event_jMenu37MouseClicked
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new NewJFrame().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser from;
+    private javax.swing.JTable grandtotal;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu30;
+    private javax.swing.JMenu jMenu36;
+    private javax.swing.JMenu jMenu37;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable report;
+    private javax.swing.JTextField salestotal;
+    private com.toedter.calendar.JDateChooser to;
+    private javax.swing.JTextField totalbill;
+    // End of variables declaration//GEN-END:variables
+}
